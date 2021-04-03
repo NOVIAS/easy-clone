@@ -1,2 +1,3 @@
-# easy-clone
-一个简单的 git clone 命令行工具
+This is my first npm package!
+
+It is just for learning.
