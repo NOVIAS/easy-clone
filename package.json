@@ -1,6 +1,6 @@
 {
   "name": "easy-clone",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "一个通过命令行替换git地址,来加速git下载的包",
   "bin": {
     "easy-clone": "bin/cli.js"
