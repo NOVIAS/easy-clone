@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 
 const { program } = require("commander");
-const { exec } = require("child_process");
+// 使用 promisify 来将 exec 转为 promise
+const { promisify } = require("util");
+// child_process.exec() 不会替换现有的进程，而是使用 shell 来执行命令。
+const exec = promisify(require("child_process").exec);
+
 const path = require("path");
 const fs = require("fs");
 const PKG = require("../package.json");
@@ -16,7 +20,7 @@ program
 
 program.parse(process.argv);
 
-function onClone(gitAddress, { target }) {
+async function onClone(gitAddress, { target }) {
   if (!String.prototype.startsWith) {
     Object.defineProperty(String.prototype, "startsWith", {
       value: function (search, pos) {
@@ -41,15 +45,19 @@ function onClone(gitAddress, { target }) {
     shell = `git clone ${gitAddress}`;
   }
   // 执行 git 命令
-  exec(shell, (err) => {
-    if (err) exit(err);
-  });
-  console.log("🤩 clone success!");
+  console.log("🚀 Cloning, Please wait....");
+  await exec(shell)
+    .then(() => {
+      console.log("✨ Clone success!");
+    })
+    .catch((err) => {
+      exit(err);
+    });
 }
 
 // 错误处理
 function printErr(err) {
-  console.error("an error occurred: " + err);
+  console.error("⭕ An error occurred: " + err);
 }
 
 /*
