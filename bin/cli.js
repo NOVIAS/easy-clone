@@ -5,10 +5,13 @@ const { program } = require("commander");
 const { promisify } = require("util");
 // child_process.exec() 不会替换现有的进程，而是使用 shell 来执行命令。
 const exec = promisify(require("child_process").exec);
-
+// 等待动画
+const ora = require("ora");
 const path = require("path");
 const fs = require("fs");
 const PKG = require("../package.json");
+
+const runState = ora("🚀 Cloning, Please wait....");
 
 program.version(PKG.version);
 
@@ -45,9 +48,10 @@ async function onClone(gitAddress, { target }) {
     shell = `git clone ${gitAddress}`;
   }
   // 执行 git 命令
-  console.log("🚀 Cloning, Please wait....");
+  runState.start();
   await exec(shell)
     .then(() => {
+      runState.succeed();
       console.log("✨ Clone success!");
     })
     .catch((err) => {
@@ -57,6 +61,7 @@ async function onClone(gitAddress, { target }) {
 
 // 错误处理
 function printErr(err) {
+  runState.fail();
   console.error("⭕ An error occurred: " + err);
 }
 

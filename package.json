@@ -9,6 +9,7 @@
   "author": "Novias",
   "license": "ISC",
   "dependencies": {
-    "commander": "^7.2.0"
+    "commander": "^7.2.0",
+    "ora": "^5.4.0"
   }
 }
